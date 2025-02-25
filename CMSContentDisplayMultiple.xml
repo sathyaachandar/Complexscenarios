@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="contentId1" type="ContentReference" label="CMS Content 1" 
+                description="Choose the first CMS Content to display." />
+            <property name="contentId2" type="ContentReference" label="CMS Content 2" 
+                description="Choose the second CMS Content to display." />
+            <property name="contentId3" type="ContentReference" label="CMS Content 3" 
+                description="Choose the third CMS Content to display." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
