@@ -1,0 +1,85 @@
+<!--
+  @description       : 
+  @author            : Shantanu Rajurkar
+  @group             : 
+  @last modified on  : 02-03-2025
+  @last modified by  : Shantanu Rajurkar
+-->
+<template>
+    <lightning-card title="Create Google Meet Calendar Event" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+            <lightning-input
+                type="text"
+                label="Event Summary (Title)"
+                value={summary}
+                onchange={handleInputChange}
+                data-field="summary">
+            </lightning-input>
+  
+            <lightning-textarea
+                label="Description"
+                value={description}
+                onchange={handleInputChange}
+                data-field="description">
+            </lightning-textarea>
+  
+            <div class="slds-m-bottom_small">
+                <lightning-input
+                    type="email"
+                    label="Add Attendee Email"
+                    value={attendeeEmail}
+                    onchange={handleInputChange}
+                    data-field="attendeeEmail">
+                </lightning-input>
+                <lightning-button
+                    label="Add Attendee"
+                    variant="neutral"
+                    class="slds-m-top_small"
+                    onclick={addAttendee}>
+                </lightning-button>
+            </div>
+  
+            <template if:true={attendees}>
+                <div>
+                    <p>Attendees:</p>
+                    <ul>
+                        <template for:each={attendees} for:item="attendee">
+                            <li key={attendee.email}>{attendee.email}</li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+  
+            <lightning-input
+                type="datetime-local"
+                label="Start Date and Time"
+                value={startDateTime}
+                onchange={handleInputChange}
+                data-field="startDateTime">
+            </lightning-input>
+  
+            <lightning-input
+                type="datetime-local"
+                label="End Date and Time"
+                value={endDateTime}
+                onchange={handleInputChange}
+                data-field="endDateTime">
+            </lightning-input>
+  
+            <lightning-input
+                type="text"
+                label="Time Zone"
+                value={timeZone}
+                onchange={handleInputChange}
+                data-field="timeZone">
+            </lightning-input>
+            <br>
+            <lightning-button
+                label="Submit"
+                variant="brand"
+                class="slds-m-top_medium"
+                onclick={handleSubmit}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+  </template>
