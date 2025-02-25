@@ -1,0 +1,88 @@
+/**
+ * @description       : 
+ * @author            : Shantanu Rajurkar
+ * @group             : 
+ * @last modified on  : 02-03-2025
+ * @last modified by  : Shantanu Rajurkar
+**/
+public with sharing class GoogleCalendarAPICallout {
+    @AuraEnabled
+    public static void createRefreshAccessToken(string attendees, string startDateTime, string endDateTime, string summary, string timeZone, string description) {
+        try {
+            system.debug('emailList: '+attendees);
+            string refresh_token = '<your refresh token>';
+            string client_id = '<your client id>';
+            string client_secret = '<your client secret>';
+            String requestBody = 
+            'client_id='+client_id +
+            '&client_secret='+client_secret +
+            '&grant_type=refresh_token' +
+            '&refresh_token='+refresh_token;
+            string endPoint = 'https://oauth2.googleapis.com/token';
+            HTTP http = new HTTP();
+            httpRequest request = new httpRequest();
+            request.setEndpoint(endPoint);
+            request.setBody(requestBody);
+            request.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+            request.setMethod('POST');
+            HTTPResponse response = http.send(request);
+            System.debug('Response: '+response.getBody());
+            // Create a JSONParser instance
+            JSONParser parser = JSON.createParser(response.getBody());
+            String accessToken = '';
+
+            // Parse the JSON to find the access_token
+            while (parser.nextToken() != null) {
+                if (parser.getCurrentToken() == JSONToken.FIELD_NAME && parser.getText() == 'access_token') {
+                    parser.nextToken(); // Move to the value
+                    accessToken = parser.getText();
+                    break;
+                }
+            }
+
+            createAnEvent(accessToken, attendees, startDateTime, endDateTime, summary, timeZone, description);
+        } catch (Exception e) {
+            System.debug('Exception: '+e.getMessage());
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+    
+    public static void createAnEvent(String bearerToken, string attendees, string startDateTime, string endDateTime, string summary, string timeZone, string description) {
+        try {
+            String requestId = '12133';
+            String jsonBody = '{' +
+            '"end": {' +
+            '"dateTime": "'+endDateTime+'",' +
+            '"timeZone": "'+timeZone+'"' +
+            '},' +
+            '"start": {' +
+            '"dateTime": "'+startDateTime+'",' +
+            '"timeZone": "'+timeZone+'"' +
+            '},' +
+            '"summary": "'+summary+'",' +
+            '"conferenceData": {' +
+            '"createRequest": {' +
+            '"requestId": "'+requestId+'",' +
+            '"conferenceSolutionkey": {' +
+            '"type": "hangoutsMeet"' +
+            '}' +
+            '}' +
+            '},' +
+            '"description": "'+description+'",' +
+            '"sendNotifications": "true",' +
+            '"attendees": ' + attendees +
+            '}';
+            system.debug('jsonBody: '+jsonBody);
+            HTTP http = new HTTP();
+            HTTPRequest request = new HTTPRequest();
+            request.setEndpoint('https://www.googleapis.com/calendar/v3/calendars/ssrajurkar@mindzvue.com/events?conferenceDataVersion=1');
+            request.setHeader('Authorization', 'Bearer '+bearerToken);
+            request.setMethod('POST');
+            request.setBody(jsonBody);
+            HTTPResponse response = http.send(request);
+            System.debug('Response: '+response.getBody());
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+}
