@@ -1,3 +1,32 @@
+/*📌hashtag#WhatsInItForYou! #100📌
+This is my 100th hashtag#WhatsInItForYou weekly post! 🎉 It’s been an incredible journey sharing Salesforce knowledge, best practices, and real-world solutions with this amazing community. 🤠 ❤️ 
+
+When I started this series, my goal was simple to break down complex Salesforce concepts into easy-to-understand, actionable insights that help developers, admins, and architects enhance their skills. Your support and enthusiasm fuel my motivation to keep bringing more valuable content. 🙌 
+
+Today, I want to cover a powerful yet simple way to display CMS Content in LWC without using Apex! 🚀
+
+Real-Time Scenario 🤠 
+
+Imagine you’re building an Experience Cloud site where you need to display multiple CMS content pieces like: 🤔 
+✔️ Introduction Text
+✔️ Agreement Terms
+✔️ Disclaimers
+
+Instead of making API calls in Apex, we can leverage Salesforce’s CMS Delivery API directly inside LWC using getContent (for a single content item) and getContents (for multiple content items). 😀 
+
+So How It Works? 🤔 
+
+✅ No Apex Required – We fetch CMS content using LWC wire adapters
+✅ Dynamic Content Loading – CMS content is controlled in Salesforce CMS and updates dynamically
+✅ Optimized for Multiple CMS Items – Fetch and render multiple content pieces efficiently.
+
+I have attached the sample code for displaying a single CMS content using getContent. This component allows content administrators/ business users to update CMS content without developer intervention! 🔥
+
+For multiple CMS content display, I have added a code gist in the comments section. Do check it out! 👇
+
+Happy Trailblazing! 💡
+
+🌩 Note: The content I've shared is for informational purposes only and represents my personal perspective, not necessarily that of Salesforce company.*/
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
