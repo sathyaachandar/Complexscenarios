@@ -1,0 +1,80 @@
+<template>
+    <lightning-card title="Overview" icon-name="standard:note">
+        <div class="slds-var-m-horizontal_medium">
+            <!-- Experience image -->
+            <div class="slds-p-bottom_small">
+                <img
+                    class="experience-image"
+                    src={pictureURL}
+                    alt="Experience illustration"
+                />
+            </div>
+            <!-- Experience description -->
+            <div class="slds-p-bottom_small">
+                <h2 class="slds-text-heading_medium">
+                    <strong>{name}</strong>
+                </h2>
+                <lightning-formatted-rich-text
+                    value={description}
+                ></lightning-formatted-rich-text>
+            </div>
+        </div>
+    </lightning-card>
+</template>
+
+
+
+import { LightningElement, api, wire } from 'lwc';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import NAME_FIELD from '@salesforce/schema/Experience__c.Name';
+import DESCRIPTION_FIELD from '@salesforce/schema/Experience__c.Description__c';
+import PICTURE_FIELD from '@salesforce/schema/Experience__c.Picture_URL__c';
+
+const fields = [NAME_FIELD, DESCRIPTION_FIELD, PICTURE_FIELD];
+
+export default class ExperienceOverview extends LightningElement {
+    @api recordId;
+
+    @wire(getRecord, { recordId: '$recordId', fields })
+    experience;
+
+    get name() {
+        return getFieldValue(this.experience.data, NAME_FIELD);
+    }
+
+    get description() {
+        return getFieldValue(this.experience.data, DESCRIPTION_FIELD);
+    }
+
+    get pictureURL() {
+        return getFieldValue(this.experience.data, PICTURE_FIELD);
+    }
+}
+
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Experience Overview</masterLabel>
+    <description
+    >Displays an overview (picture and description) of an experience.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+              <object>Experience__c</object>
+            </objects>
+          </targetConfig>      
+    </targetConfigs>
+</LightningComponentBundle>
+
+.experience-image {
+    border-radius: 14px;
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    object-position: middle;
+}
