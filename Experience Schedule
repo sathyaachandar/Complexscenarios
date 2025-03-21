@@ -1,3 +1,5 @@
+
+//Displays the dates of a particular event and its timing from the record in a beautiful lwc
 <!-- sldsValidatorIgnore -->
 <template>
     <lightning-card title="Schedule" icon-name="standard:event">
