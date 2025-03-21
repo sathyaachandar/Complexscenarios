@@ -1,3 +1,4 @@
+//Displays the Image url of an record and its description in a beautiful lwc
 <template>
     <lightning-card title="Overview" icon-name="standard:note">
         <div class="slds-var-m-horizontal_medium">
@@ -78,3 +79,5 @@ export default class ExperienceOverview extends LightningElement {
     object-fit: cover;
     object-position: middle;
 }
+
+
