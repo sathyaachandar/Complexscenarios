@@ -1,0 +1,66 @@
+<template>
+    <template for:each={sessions} for:item="session" if:true={isSessions}>
+        <c-session-selector-item onhandleselect={onHandleSelect} instance={session} key={session.Id}></c-session-selector-item>
+    </template>
+    <template if:false={isSessions}>
+        <c-session-selector-item-empty></c-session-selector-item-empty>
+    </template>
+</template>
+
+import { LightningElement, api } from 'lwc';
+import { FlowNavigationNextEvent } from 'lightning/flowSupport';
+let i = 0;
+
+export default class SessionSelector extends LightningElement {
+    @api sessions;
+    @api selectedSessionDateTime;
+    @api selectedSessionId;
+    isSessions;
+
+    connectedCallback() {
+        this.isSessions = undefined != this.sessions && this.sessions != null && this.sessions.length > 0;
+
+        if(this.isSessions) {
+            let sessions = [...this.sessions];
+            for(i = 0; i < this.sessions.length; i++) {
+                var sessionSlotsDisabled = false;
+                var sessionBgColor = 'background:#009900;';
+                var slotsRemaining = this.sessions[i].Capacity__c - this.sessions[i].Attendees__c;
+                if(slotsRemaining <= 0) {
+                    sessionSlotsDisabled = true;
+                    sessionBgColor = 'background:#990000;';
+                }
+
+                let session = { ...this.sessions[i], LabelIsDateTime: true, SlotsRemaining: slotsRemaining, InstanceSlotsDisabled: sessionSlotsDisabled, InstanceBgColor: sessionBgColor }
+                
+                sessions[i] = session;
+            }
+            this.sessions = sessions;
+        }
+    }
+
+    onHandleSelect(event) {
+        console.log('session-selector: select clicked!');
+        this.selectedSessionDateTime = event.detail.selectedInstance;
+        this.selectedSessionId = event.detail.selectedInstanceId;
+        const navigateNextEvent = new FlowNavigationNextEvent();
+        this.dispatchEvent(navigateNextEvent);
+    }
+}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>51.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <masterLabel>Session Selector</masterLabel>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="sessions" type="@salesforce/schema/Intervention__c[]"/> 
+            <property name="selectedSessionDateTime" type="DateTime" role="outputOnly"/> 
+            <property name="selectedSessionId" type="DateTime" role="outputOnly"/> 
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
